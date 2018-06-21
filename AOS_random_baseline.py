@@ -4,17 +4,20 @@ import gym
 import gym_AVD
 import json
 
+
 AVD_ROOT_DIR = '/playpen/ammirato/Data/RohitData/'
 TARGET_IMAGE_DIR = '/playpen/ammirato/Data/Target_Images/AVD_BB_exact_few'
 
-
+#if you are not using target images, just omit the target_path input
 env = gym.make('AVD-v0')
 env.setup(AVD_path=AVD_ROOT_DIR, 
           target_path=TARGET_IMAGE_DIR, 
-          instance_ids=[],
-          scene_names='Home_001_1',
-          choose_sequentially=True,
-          max_steps=10000)
+          instance_ids=[], #choose all possible instances
+          scene_names=['Home_001_1', 'Home_005_2'], #choose 2 scenes
+          choose_sequentially=True, #go sequentially through every 
+          max_steps=10000) #max steps env will allow.
+#note: while decreasing max_steps could also decrease you average number of
+#steps per episode, it will only do so if it also reduces your success rate.  
 
 
 action_space = env.action_space
@@ -30,6 +33,8 @@ while(first_obs != -1):
     scene_name = env_info[0]
     instance_id = env_info[1]
     starting_img_name = env_info[2]
+
+    #a silly way to populate the dictionary for AVDB AOS evaluation
     try:
         all_paths[scene_name][instance_id][starting_img_name] = []
     except:
@@ -41,17 +46,12 @@ while(first_obs != -1):
             all_paths[scene_name][instance_id] = {}
             all_paths[scene_name][instance_id][starting_img_name] = []
 
-    print(scene_name)
-    print(instance_id)
-    print(starting_img_name)
-    print(num_episodes)
     num_episodes+=1
     while not(done):
         action = action_space.sample()
         all_paths[scene_name][instance_id][starting_img_name].append(action)
         obs, reward, done,info = env.step(action) 
         num_steps +=1 
-        #print(num_steps)
         cur_img_name = env.current_scene_info[1][1]
     done=False
     first_obs = env.reset()
@@ -61,3 +61,4 @@ while(first_obs != -1):
 
 with open(os.path.join('./random_output_paths.json'),'w') as outfile:
     json.dump(all_paths,outfile)
+
