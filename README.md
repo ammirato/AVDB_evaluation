@@ -13,20 +13,22 @@ See `AOS_random_baseline` for an example of using the [gym-AVD](https://github.c
 -     `a Dict with Keys=object ids Values=`
 -         `a Dict with Keys=inital-image-name Values=PATH`
 
-Where PATH is a list of integers, where each integers represent an action taken. The mapping from integers to actions is:
+Where PATH is a list of integers, where each integer represent an action taken. The mapping from integers to actions is:
 
 - 0:forward
 - 1:backward
 - 2:rotate-cw
 - 3:rotate-ccw
+
+(we do not allow right and left movement)
  
 The evaluation first checks to make sure the path is valid from starting image to destination, so it is fine to output noisy paths.  
 
 `AOS_eval` computes 3 evaluation metrics:
 1. Success rate: how often a destination image is reached
 2. Average path length of successful episodes
-3. Average (shortest path length)/(model path length) of successful episodes
-
+3. Average (shortest path length)/(model path length) of successful episodes. This has a max of 1, and is useful for comparing across different 
+cenes of different sizes. 
 
 
 
