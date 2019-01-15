@@ -1,1 +1,3 @@
 pyjson
+opencv-python
+Image
