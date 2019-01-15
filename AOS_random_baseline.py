@@ -5,8 +5,9 @@ import gym_AVD
 import json
 
 
-AVD_ROOT_DIR = '/playpen/ammirato/Data/RohitData/'
-TARGET_IMAGE_DIR = '/playpen/ammirato/Data/Target_Images/AVD_BB_exact_few'
+AVD_ROOT_DIR = '/net/bvisionserver3/playpen1/ammirato/Data/TDID_datasets/ActiveVisionDataset/'
+#TARGET_IMAGE_DIR = '/net/bvisionserver3/playpen1/ammirato/Data/TDID_datasets/target_images/'
+TARGET_IMAGE_DIR = '/net/bvisionserver3/playpen1/ammirato/Data/TDID_datasets/timgs/'
 
 #if you are not using target images, just omit the target_path input
 env = gym.make('AVD-v0')
@@ -53,6 +54,8 @@ while(first_obs != -1):
         obs, reward, done,info = env.step(action) 
         num_steps +=1 
         cur_img_name = env.current_scene_info[1][1]
+    print(scene_name, instance_id,starting_img_name, 
+          len(all_paths[scene_name][instance_id][starting_img_name]))
     done=False
     first_obs = env.reset()
     if first_obs != -1:
